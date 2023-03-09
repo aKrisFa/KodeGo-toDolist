@@ -1,0 +1,60 @@
+body {
+    background-color: rgb(171, 211, 208) !important;
+    background-image: linear-gradient(border-top-left-radius rgb(183, 0, 255));
+    background-size: 100px 100px;
+} 
+
+header{
+    background-image: url(../imagesTDL/dd41bbffab6abf83d2bd8358a3c78d59.jpg );
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+#toDotitle img{
+    width: 30px;
+    height: 30px;
+}
+
+#toDotitle {
+    color: rgb(2, 29, 23);
+    font-family: Philosopher;
+}
+#toDodate {
+    color: rgb(0, 0, 0);
+    font-family: Philosopher;
+}
+
+#myInput {
+    width: 450px;
+    height: 40px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+button #addListbtn {
+    border-top-right-radius: 10px !important;
+    border-bottom-right-radius: 10px !important;
+    background-color: rgb(248, 179, 208) !important;
+}
+
+span .close{
+    width: 10px;
+}
+
+#myUL ul LI {
+    list-style: none;
+}
+
+#myUL ul li {
+    width: 450px;
+    height: 40px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+
+
+
+
+
