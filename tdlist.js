@@ -8,41 +8,51 @@ addBtn.addEventListener("click", function(event){
   if(event) addItem();
 
   function addItem(){            
-      const divInput = document.createElement("div");
-      const inputText = document.createElement("p");
+      const divInput = document.createElement("div");//add div input group
       const checkIcon = document.createElement("input");
+      const inputText = document.createElement("input");
       const editIcon = document.createElement("button");
       const trashIcon = document.createElement("button");
   
-      divInput.className = ("container");      
+      divInput.className = ("input-group");  
+      
       inputText.id = "inputValue";
-      inputText.innerHTML = input.value;
+      inputText.className = ("form-control");
+      inputText.value = input.value;
+      inputText.readOnly = true;
+
       divInput.append(inputText);
 
-
-      checkIcon.id = "done";
-      checkIcon.type = "checkbox";
-      checkIcon.addEventListener("click", function() {
-        inputText.style.textDecorationStyle = "line-through";
-      });
-      divInput.append(checkIcon);
-
+      editIcon.className = ("btn btn-outline-secondary")
       editIcon.id = "edit";
+      editIcon.type = "button";
       editIcon.innerHTML = "Edit";
       editIcon.addEventListener("click", function() {
-        paragraph.contentEditable = true;
+        if(editIcon.innerText.toLowerCase() == "edit"){
+          inputText.removeAttribute("readonly");
+          inputText.focus();
+          editIcon.innerText = "Save";
+        } else {
+          inputText.setAttribute("readonly", "readonly");
+          editIcon.innerText = "Edit";
+        }
       });
+    
       divInput.append(editIcon);
 
+      trashIcon.className = ("btn btn-outline-secondary")
       trashIcon.id = "delete";
       trashIcon.innerHTML = "Delete";
       trashIcon.addEventListener("click", function(){
           divInput.remove();
       })       
+
       divInput.append(trashIcon);
+      
       toDoItems.appendChild(divInput);
   
  }
  })
 
     
+// icon not showing, change them to inner text
