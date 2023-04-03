@@ -53,8 +53,7 @@ span .close{
     border-bottom-left-radius: 10px;
 }
 
-
-
-
-
-
+input.done {
+    background: #c2c2c2;
+    color: white;
+}
