@@ -28,12 +28,66 @@ function markTaskAsDone(event) {
   }
 }
 
+function updateTask(event) {
+  const taskId = event.target.value;
+  const textInput = document.getElementById(`input-${taskId}`);
+  const updatedTask = textInput.value;
+
+  fetch(
+    `${baseUrl}/task/update/${taskId}`,
+    {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        content: updatedTask,
+      }),
+      method: 'PATCH',
+    }
+  ).then((response) => {
+    if (response.status == 200) {
+      return response.json();
+    }
+  }).then((data) => {
+    if (data.type == 'success') {
+      textInput.value = data.task.content;
+      textInput.readOnly = true;
+      event.target.innerHTML = 'Edit';
+      event.target.removeEventListener('click', updateTask);
+      event.target.addEventListener('click', allowEdit);
+    } else {
+      alert(data.message);
+    }
+  });
+}
+
 function allowEdit(event) {
   const taskId = event.target.value;
   const input = document.getElementById(`input-${taskId}`);
   input.readOnly = false;
   event.target.innerHTML = 'Save';
   input.focus();
+
+  event.target.removeEventListener('click', allowEdit);
+  event.target.addEventListener('click', updateTask);
+}
+
+function deleteTask(event) {
+  const taskId = event.target.value;
+  if (confirm(`Are you sure to delete Task #${taskId}`)) {
+    fetch(`${baseUrl}/task/delete/${taskId}`, {
+      method: 'DELETE',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+    }).then((response) => {
+      if (response.status == 200) {
+        document.getElementById(`task-group-${taskId}`).remove();
+      }
+    });
+  }
 }
 
 function buildTasksList(tasks) {
@@ -47,6 +101,7 @@ function buildTasksList(tasks) {
     const markAsDoneCb = document.createElement('input');
 
     container.className = 'input-group mb-1';
+    container.id = `task-group-${row.id}`;
 
     // set mark as done checkbox html attributes
     checkboxContainer.className = 'input-group-text';
@@ -89,6 +144,9 @@ function buildTasksList(tasks) {
     // set trash button html attributes
     trashBtn.className = 'btn btn-outline-secondary';
     trashBtn.innerHTML = 'Delete';
+    trashBtn.value = row.id;
+
+    trashBtn.addEventListener('click', deleteTask);
 
     // append trash button
     container.append(trashBtn);
