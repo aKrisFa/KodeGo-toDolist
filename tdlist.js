@@ -1,6 +1,6 @@
 const form = document.getElementById('todo-form');
 const input = document.getElementById('task-content');
-const baseUrl = 'http://localhost:3000';
+const baseUrl = 'https://todo-list-api-ly7j.onrender.com';
 const todoListContainer = document.getElementById('to-do-list');
 
 function markTaskAsDone(event) {
@@ -20,11 +20,39 @@ function markTaskAsDone(event) {
     ).then((response) => {
       if (response.status == 200) {
         input.classList.add('done');
+        event.target.removeEventListener('click', markTaskNotDone);
+
       }
     });
   } else {
     // unchecked, revert
     input.classList.remove('done');
+  }
+}
+
+function markTaskNotDone(event) {
+  const taskId = event.target.value;
+  const input = document.getElementById(`input-${taskId}`);
+  if (event.target.unchecked) {
+    // unchecked, mark as not done
+    fetch(
+      `${baseUrl}/task/mark-as-not-done/${taskId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
+    ).then((response) => {
+      if (response.status == 200) {
+        input.classList.add('notdone');
+        event.target.removeEventListener('click', markTaskAsDone);
+      }
+    });
+  } else {
+    // unchecked, revert
+    input.classList.remove('notdone');
   }
 }
 
@@ -195,54 +223,6 @@ function createTask(event) {
       alert(data.message);
     }
   });
-
-
-  // // place here the element for new task
-
-  //     const divInput = document.createElement("div");//add div input group
-  //     const checkIcon = document.createElement("input");
-  //     const inputText = document.createElement("input");
-  //     const editIcon = document.createElement("button");
-  //     const trashIcon = document.createElement("button");
-  
-  //     divInput.className = ("input-group");  
-      
-  //     inputText.id = "inputValue";
-  //     inputText.className = ("form-control");
-  //     inputText.value = input.value;
-  //     inputText.readOnly = true;
-
-  //     divInput.append(inputText);
-
-  //     editIcon.className = ("btn btn-outline-secondary")
-  //     editIcon.id = "edit";
-  //     editIcon.type = "button";
-  //     editIcon.innerHTML = "Edit";
-  //     editIcon.addEventListener("click", function() {
-  //       if(editIcon.innerText.toLowerCase() == "edit"){
-  //         inputText.removeAttribute("readonly");
-  //         inputText.focus();
-  //         editIcon.innerText = "Save";
-  //       } else {
-  //         inputText.setAttribute("readonly", "readonly");
-  //         editIcon.innerText = "Edit";
-  //       }
-  //     });
-    
-  //     divInput.append(editIcon);
-
-  //     trashIcon.className = ("btn btn-outline-secondary")
-  //     trashIcon.id = "delete";
-  //     trashIcon.innerHTML = "Delete";
-  //     trashIcon.addEventListener("click", function(){
-  //         divInput.remove();
-  //     })       
-
-  //     divInput.append(trashIcon);
-      
-  //     toDoItems.appendChild(divInput);
-  
-
 }
 
 function fetchTasksList() {
